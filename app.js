@@ -30,7 +30,8 @@ app.factory("Book", ["$resource", function($resource) {
     query: {
       isArray: true,
       transformResponse: function(data) { return angular.fromJson(data).books; }
-    }
+    },
+    update: { method:'PUT' }
   });
 }]);
 
@@ -40,6 +41,9 @@ app.factory("Book", ["$resource", function($resource) {
 
 app.controller("BooksIndexCtrl", ["$scope", "Book", function ($scope, Book) {
   $scope.allBooks = Book.query();
+  $scope.save = function (book) {
+    Book.save(book);
+  };
 }]);
 
 app.controller('BooksShowCtrl', ['$scope', '$routeParams', 'Book', function ($scope, $routeParams, Book) {
@@ -48,6 +52,8 @@ app.controller('BooksShowCtrl', ['$scope', '$routeParams', 'Book', function ($sc
   
   $scope.deleteBook = Book.get({bookId: bookId});
   Book.delete({bookId: bookId});
+
+  Book.update({bookId: bookId});
 }]);
 
 
